@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal e-RPH 2026 | SMK SELIRIK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+        .glassy {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        .logo-container {
+            width: 150px;
+            height: 150px;
+            margin: -75px auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            overflow: hidden;
+            background: white;
+            padding: 10px;
+        }
+        .status-hantar { color: #059669; font-weight: bold; }
+        .status-lewat { color: #d97706; font-weight: bold; }
+        .status-tiada { color: #dc2626; font-weight: bold; }
+        .hide { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-blue-900 text-white pt-16 pb-24 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold uppercase tracking-wider">SMK SELIRIK, KAPIT</h1>
+        <p class="text-xl mt-2 font-light">Portal Semakan Rekod Penghantaran e-RPH 2026</p>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 -mt-16">
+        
+        <div class="logo-container glassy">
+            <img src="https://i.ibb.co/VYSKMXf1/Logo-Selirik.png" alt="Logo SMK Selirik" class="max-w-full h-auto">
+        </div>
+
+        <div id="loginSection" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 mb-10">
+            <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Log Masuk Guru</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Masukkan No. Kad Pengenalan</label>
+                    <input type="password" id="icInput" placeholder="Contoh: 850101135566" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+                <button onclick="checkLogin()" id="btnMasuk" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
+                    Masuk Portal
+                </button>
+                <p id="errorMsg" class="text-red-600 text-center text-sm font-medium hide">No. IC tidak dijumpai. Sila cuba lagi.</p>
+            </div>
+        </div>
+
+        <div id="dashboardSection" class="max-w-5xl mx-auto hide">
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
+                <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-100 shadow-inner">
+                    <img id="profImg" src="" alt="Profil" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-grow text-center md:text-left">
+                    <h2 id="profNama" class="text-2xl font-bold text-gray-800 uppercase"></h2>
+                    <p class="text-gray-600">No. KP: <span id="profIC"></span></p>
+                    <p class="text-blue-700 font-bold mt-1" id="profJawatan"></p>
+                </div>
+                <div class="flex flex-col items-center justify-center bg-blue-50 p-4 rounded-xl">
+                    <span class="text-sm text-gray-500 uppercase tracking-tighter font-semibold">Peratus Penghantaran</span>
+                    <span id="profPeratus" class="text-3xl font-black text-blue-900">0%</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-center text-white">
+                <div class="bg-emerald-600 p-4 rounded-xl shadow">
+                    <p class="text-xs uppercase opacity-80">Hantar</p>
+                    <p id="statHantar" class="text-2xl font-bold">0</p>
+                </div>
+                <div class="bg-red-600 p-4 rounded-xl shadow">
+                    <p class="text-xs uppercase opacity-80">Tidak Hantar</p>
+                    <p id="statTidak" class="text-2xl font-bold">0</p>
+                </div>
+                <div class="bg-blue-600 p-4 rounded-xl shadow">
+                    <p class="text-xs uppercase opacity-80">Jumlah Minggu</p>
+                    <p id="statMinggu" class="text-2xl font-bold">0</p>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <p class="text-xs uppercase opacity-80">Catatan</p>
+                    <p id="statCatatan" class="text-sm font-medium">Tiada</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12">
+                <div class="bg-gray-50 px-6 py-4 border-b">
+                    <h3 class="font-bold text-gray-700 uppercase tracking-wider">Rekod Penghantaran Mingguan</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-blue-900 text-white text-sm">
+                                <th class="px-6 py-3 border">Minggu / Tarikh</th>
+                                <th class="px-6 py-3 border">Tarikh Hantar</th>
+                                <th class="px-6 py-3 border">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordTableBody" class="text-sm">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="text-center pb-10">
+                <button onclick="location.reload()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg font-medium transition">
+                    ← Log Keluar
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-6 text-center text-gray-500 text-sm">
+        Hakcipta <strong>NDJE@Selirik, Kapit 2026</strong>
+    </footer>
+
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSAfGkb0V0XOKhlyjNgHNeSTVoRO6tw8gorjTKVzJ9lqLwm_pL38utfOBJOu7yXBMszjk6m78XP_6f2/pub?gid=1853580490&single=true&output=csv';
+        let teachersData = [];
+
+        // Tarikh Mula Minggu (Data rujukan dari prompt)
+        const weekDates = [
+            "01/02/2026", "01/02/2026", "01/02/2026", "08/02/2026", "15/02/2026", 
+            "22/02/2026", "01/03/2026", "08/03/2026", "15/03/2026", "22/03/2026",
+            "05/04/2026", "12/04/2026", "19/04/2026", "26/04/2026", "03/05/2026",
+            "10/05/2026", "17/05/2026", "24/05/2026", "14/06/2026", "21/06/2026",
+            "28/06/2026", "05/07/2026", "12/07/2026", "19/07/2026", "26/07/2026",
+            "02/08/2026", "09/08/2026", "16/08/2026", "23/08/2026", "30/08/2026",
+            "13/09/2026", "20/09/2026", "27/09/2026", "04/10/2026", "11/10/2026",
+            "18/10/2026", "25/10/2026", "01/11/2026", "08/11/2026", "15/11/2026",
+            "22/11/2026", "29/11/2026", "06/12/2026"
+        ];
+
+        // Fetch Data from Google Sheets
+        window.onload = async () => {
+            try {
+                const response = await fetch(CSV_URL);
+                const data = await response.text();
+                parseCSV(data);
+            } catch (error) {
+                console.error("Gagal ambil data:", error);
+                alert("Ralat sambungan data. Sila semak capaian internet.");
+            }
+        };
+
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            // Abaikan header (line 0)
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                // Guna regex untuk handle CSV dengan koma di dalam content
+                const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                teachersData.push(columns.map(c => c.replace(/"/g, '').trim()));
+            }
+        }
+
+        function checkLogin() {
+            const inputIC = document.getElementById('icInput').value;
+            const user = teachersData.find(row => row[1] === inputIC); // Kolum B adalah index 1
+
+            if (user) {
+                showDashboard(user);
+            } else {
+                document.getElementById('errorMsg').classList.remove('hide');
+            }
+        }
+
+        function showDashboard(userData) {
+            document.getElementById('loginSection').classList.add('hide');
+            document.getElementById('dashboardSection').classList.remove('hide');
+
+            // Set Profile Info
+            document.getElementById('profNama').innerText = userData[2]; // Kolum C
+            document.getElementById('profIC').innerText = userData[1];   // Kolum B
+            document.getElementById('profJawatan').innerText = userData[3] || "GURU AKADEMIK"; // Kolum D (Asumsi)
+            document.getElementById('profImg').src = userData[4] || "https://via.placeholder.com/150"; // Kolum E
+            
+            // Set Summary Stats
+            document.getElementById('statTidak').innerText = userData[189]; // GH
+            document.getElementById('statHantar').innerText = userData[190]; // GI
+            document.getElementById('statMinggu').innerText = userData[191]; // GJ
+            document.getElementById('profPeratus').innerText = userData[192]; // GK
+            document.getElementById('statCatatan').innerText = userData[193] || "TIADA"; // GL
+
+            // Render Weekly Data
+            const tableBody = document.getElementById('recordTableBody');
+            tableBody.innerHTML = '';
+
+            // Mapping bermula dari Kolum G (Index 6) dan H (Index 7)
+            // Selang setiap 4 kolum untuk minggu seterusnya (K=10, L=11, etc.)
+            let colIndex = 6;
+            for (let m = 0; m < 43; m++) {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition border-b";
+
+                const dateHantar = userData[colIndex] || "-";
+                const status = userData[colIndex + 1] || "TIADA REKOD";
+                
+                let statusClass = "status-tiada";
+                if(status.includes("Hantar")) statusClass = "status-hantar";
+                if(status.includes("Lewat")) statusClass = "status-lewat";
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-gray-700">
+                        <span class="block text-xs text-blue-500 font-bold uppercase tracking-widest">Minggu ${m + 1}</span>
+                        ${weekDates[m]}
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">${dateHantar}</td>
+                    <td class="px-6 py-4 ${statusClass}">${status}</td>
+                `;
+                tableBody.appendChild(tr);
+                colIndex += 4; // Lompat ke tarikh minggu seterusnya
+            }
+        }
+
+        // Support 'Enter' key to login
+        document.getElementById('icInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkLogin();
+        });
+    </script>
+</body>
+</html>
