@@ -30,7 +30,7 @@
         .logo-container {
             width: 140px;
             height: 140px;
-            margin: 0 auto 24px auto; /* No more negative margin, fits perfectly */
+            margin: 0 auto 24px auto; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -47,7 +47,28 @@
         .status-hantar { color: #059669; font-weight: 600; }
         .status-lewat { color: #d97706; font-weight: 600; }
         .status-tiada { color: #dc2626; font-weight: 600; }
-        .hide { display: none; }
+        .hide { display: none !important; }
+
+        /* Print Styles */
+        @media print {
+            body { background-color: white; font-size: 12pt; }
+            .no-print { display: none !important; }
+            .corporate-header { background: transparent !important; box-shadow: none !important; padding-top: 10px; padding-bottom: 10px; }
+            .corporate-header h1 { color: #0f172a !important; text-shadow: none !important; }
+            .corporate-header p { color: #333 !important; }
+            .glassy { background: none; border: none; box-shadow: none; filter: none; }
+            .logo-container { width: 100px; height: 100px; margin-bottom: 10px; padding: 0; }
+            main { padding: 0 !important; margin-top: 0 !important; }
+            .shadow-lg, .shadow-xl, .shadow-md, .shadow-sm { box-shadow: none !important; }
+            .rounded-2xl, .rounded-xl, .rounded-md { border-radius: 0 !important; }
+            .border { border: 1px solid #ddd !important; }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            thead { display: table-header-group; }
+            tfoot { display: table-footer-group; }
+            /* Force background colors for print */
+            * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -62,7 +83,7 @@
             <h1 class="text-3xl md:text-5xl font-extrabold uppercase tracking-widest mb-4 drop-shadow-md">
                 SMK SELIRIK, KAPIT
             </h1>
-            <div class="h-1 w-24 bg-blue-400 mx-auto rounded-full mb-5 opacity-80"></div>
+            <div class="h-1 w-24 bg-blue-400 mx-auto rounded-full mb-5 opacity-80 no-print"></div>
             <p class="text-lg md:text-xl font-light tracking-wide text-blue-100">
                 Portal Semakan Rekod Penghantaran e-RPH <span class="font-semibold text-white">2026</span>
             </p>
@@ -71,14 +92,14 @@
 
     <main class="flex-grow container mx-auto px-4 py-12">
         
-        <div id="loginSection" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 mb-10 border border-gray-100">
+        <div id="loginSection" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 mb-10 border border-gray-100 no-print">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Log Masuk Guru</h2>
             <p class="text-center text-gray-500 text-sm mb-6">Sila masukkan maklumat pengesahan anda</p>
             
             <div class="space-y-5">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan</label>
-                    <input type="password" id="icInput" placeholder="Contoh: 85010113XXXX" class="block w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 focus:bg-white outline-none transition-all">
+                    <input type="password" id="icInput" placeholder="Contoh: 850101135566" class="block w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 focus:bg-white outline-none transition-all">
                 </div>
                 <button onclick="checkLogin()" id="btnMasuk" class="w-full bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950 text-white font-bold py-3.5 rounded-xl transition duration-300 transform hover:-translate-y-1 shadow-lg">
                     Akses Portal
@@ -88,7 +109,18 @@
         </div>
 
         <div id="dashboardSection" class="max-w-5xl mx-auto hide">
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 flex flex-col md:flex-row items-center gap-8 border border-gray-100">
+            
+            <div class="flex justify-end gap-3 mb-6 no-print">
+                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-semibold transition shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    Cetak / Simpan PDF
+                </button>
+                <button onclick="location.reload()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-5 py-2.5 rounded-lg font-semibold transition shadow-sm">
+                    Log Keluar
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 flex flex-col md:flex-row items-center gap-8 border border-gray-100 print:mb-4 print:p-4">
                 <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-50 shadow-md flex-shrink-0">
                     <img id="profImg" src="" alt="Profil" class="w-full h-full object-cover">
                 </div>
@@ -99,26 +131,26 @@
                         <span id="profJawatan" class="text-blue-800 font-bold bg-blue-50 px-3 py-1 rounded-md text-sm uppercase"></span>
                     </div>
                 </div>
-                <div class="flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 p-5 rounded-2xl min-w-[160px] shadow-sm">
+                <div class="flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 p-5 rounded-2xl min-w-[160px] shadow-sm print:bg-none print:border-none">
                     <span class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Kadar Penghantaran</span>
                     <span id="profPeratus" class="text-4xl font-black text-blue-900">0%</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10 text-center text-white">
-                <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 rounded-2xl shadow-md">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10 text-center text-white print:mb-6">
+                <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 rounded-2xl shadow-md print:bg-emerald-600">
                     <p class="text-xs uppercase font-medium tracking-wider opacity-90 mb-1">Telah Hantar</p>
                     <p id="statHantar" class="text-3xl font-bold">0</p>
                 </div>
-                <div class="bg-gradient-to-br from-red-500 to-red-700 p-5 rounded-2xl shadow-md">
+                <div class="bg-gradient-to-br from-red-500 to-red-700 p-5 rounded-2xl shadow-md print:bg-red-600">
                     <p class="text-xs uppercase font-medium tracking-wider opacity-90 mb-1">Tidak Hantar</p>
                     <p id="statTidak" class="text-3xl font-bold">0</p>
                 </div>
-                <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-5 rounded-2xl shadow-md">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-5 rounded-2xl shadow-md print:bg-blue-600">
                     <p class="text-xs uppercase font-medium tracking-wider opacity-90 mb-1">Jumlah Minggu</p>
                     <p id="statMinggu" class="text-3xl font-bold">0</p>
                 </div>
-                <div class="bg-gradient-to-br from-slate-600 to-slate-800 p-5 rounded-2xl shadow-md flex flex-col justify-center">
+                <div class="bg-gradient-to-br from-slate-600 to-slate-800 p-5 rounded-2xl shadow-md flex flex-col justify-center print:bg-slate-700">
                     <p class="text-xs uppercase font-medium tracking-wider opacity-90 mb-1">Catatan</p>
                     <p id="statCatatan" class="text-sm font-semibold uppercase leading-tight">Tiada</p>
                 </div>
@@ -127,7 +159,7 @@
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12 border border-gray-100">
                 <div class="bg-slate-50 px-6 py-5 border-b border-gray-200">
                     <h3 class="font-bold text-slate-800 uppercase tracking-wide flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        <svg class="w-5 h-5 mr-2 text-blue-600 no-print" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                         Log Penghantaran Mingguan
                     </h3>
                 </div>
@@ -135,9 +167,9 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-800 text-white text-sm">
-                                <th class="px-6 py-4 font-semibold tracking-wider">Minggu & Tarikh</th>
-                                <th class="px-6 py-4 font-semibold tracking-wider">Tarikh Hantar</th>
-                                <th class="px-6 py-4 font-semibold tracking-wider">Status Semasa</th>
+                                <th class="px-6 py-4 font-semibold tracking-wider border print:border-gray-300">Minggu & Tarikh</th>
+                                <th class="px-6 py-4 font-semibold tracking-wider border print:border-gray-300">Tarikh Hantar</th>
+                                <th class="px-6 py-4 font-semibold tracking-wider border print:border-gray-300">Status Semasa</th>
                             </tr>
                         </thead>
                         <tbody id="recordTableBody" class="text-sm divide-y divide-gray-100">
@@ -145,16 +177,10 @@
                     </table>
                 </div>
             </div>
-
-            <div class="text-center pb-10">
-                <button onclick="location.reload()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-8 py-3 rounded-xl font-semibold transition shadow-sm">
-                    Log Keluar Sistem
-                </button>
-            </div>
         </div>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto print:mt-10 print:border-none">
         <div class="container mx-auto px-4 text-center">
             <p class="text-gray-500 text-sm font-medium">
                 Hakcipta Terpelihara &copy; 2026 <span class="text-blue-900 font-bold">NDJE@Selirik, Kapit</span>
@@ -165,6 +191,14 @@
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSAfGkb0V0XOKhlyjNgHNeSTVoRO6tw8gorjTKVzJ9lqLwm_pL38utfOBJOu7yXBMszjk6m78XP_6f2/pub?gid=1853580490&single=true&output=csv';
         let teachersData = [];
+
+        // Manual Mapping Database untuk Gambar Profil berdasarkan No. KP
+        const profileImages = {
+            "850805135684": "https://i.ibb.co/KjgX1v4h/photo-2026-05-02-13-57-18.jpg",
+            "860805526983": "https://i.ibb.co/gbjVBzQm/th-6.jpg"
+            // Tambah ID lain dengan format -> "NO_IC": "URL_GAMBAR"
+        };
+        const defaultProfileImg = "https://ui-avatars.com/api/?name=Guru&background=0D8ABC&color=fff&size=150";
 
         const weekDates = [
             "01/02/2026", "01/02/2026", "01/02/2026", "08/02/2026", "15/02/2026", 
@@ -216,41 +250,53 @@
             document.getElementById('loginSection').classList.add('hide');
             document.getElementById('dashboardSection').classList.remove('hide');
 
-            document.getElementById('profNama').innerText = userData[2]; 
-            document.getElementById('profIC').innerText = userData[1];   
+            const icNumber = userData[1];
+            const teacherName = userData[2];
+
+            document.getElementById('profNama').innerText = teacherName; 
+            document.getElementById('profIC').innerText = icNumber;   
             document.getElementById('profJawatan').innerText = userData[3] || "GURU AKADEMIK"; 
-            document.getElementById('profImg').src = userData[4] || "https://via.placeholder.com/150"; 
             
+            // Set profile image based on mapping, or fallback to default
+            let finalImage = profileImages[icNumber];
+            if (!finalImage) {
+                // Generates an avatar with initials if image not found
+                finalImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(teacherName)}&background=0D8ABC&color=fff&size=150`;
+            }
+            document.getElementById('profImg').src = finalImage; 
+            
+            // Set Summary Stats
             document.getElementById('statTidak').innerText = userData[189] || "0"; 
             document.getElementById('statHantar').innerText = userData[190] || "0"; 
             document.getElementById('statMinggu').innerText = userData[191] || "0"; 
             document.getElementById('profPeratus').innerText = userData[192] || "0%"; 
             document.getElementById('statCatatan').innerText = userData[193] || "TIADA"; 
 
+            // Render Weekly Data Table
             const tableBody = document.getElementById('recordTableBody');
             tableBody.innerHTML = '';
 
             let colIndex = 6;
             for (let m = 0; m < 43; m++) {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition duration-150";
+                tr.className = "hover:bg-slate-50 transition duration-150 print:border-b print:border-gray-200";
 
                 const dateHantar = userData[colIndex] || "-";
                 const status = userData[colIndex + 1] || "TIADA REKOD";
                 
-                let statusClass = "status-tiada bg-red-50/50";
-                if(status.toLowerCase().includes("hantar")) statusClass = "status-hantar bg-emerald-50/50";
-                if(status.toLowerCase().includes("lewat")) statusClass = "status-lewat bg-amber-50/50";
+                let statusClass = "status-tiada bg-red-50/50 print:bg-transparent";
+                if(status.toLowerCase().includes("hantar")) statusClass = "status-hantar bg-emerald-50/50 print:bg-transparent";
+                if(status.toLowerCase().includes("lewat")) statusClass = "status-lewat bg-amber-50/50 print:bg-transparent";
 
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-medium text-slate-800">
+                    <td class="px-6 py-4 font-medium text-slate-800 border-b print:border-gray-300">
                         <div class="flex flex-col">
                             <span class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-0.5">Minggu ${m + 1}</span>
                             <span class="text-sm">${weekDates[m]}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-slate-600 font-medium">${dateHantar}</td>
-                    <td class="px-6 py-4 ${statusClass} rounded-r-lg">${status}</td>
+                    <td class="px-6 py-4 text-slate-600 font-medium border-b print:border-gray-300">${dateHantar}</td>
+                    <td class="px-6 py-4 ${statusClass} rounded-r-lg border-b print:border-gray-300">${status}</td>
                 `;
                 tableBody.appendChild(tr);
                 colIndex += 4; 
